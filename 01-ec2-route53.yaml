@@ -17,7 +17,7 @@
     - database
   tasks:
   - name: "Create Ec2 instances"
-    amazon.aws.ec2-instance:
+    amazon.aws.ec2_instance:
       name: "{{ item }}"
       image_id: "{{ ami_id }}"
       security_group: "{{ sg_group_id }}"
