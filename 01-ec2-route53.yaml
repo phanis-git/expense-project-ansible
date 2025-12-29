@@ -25,7 +25,7 @@
         - "{{ sg_group_id }}"
       instance_type: "{{ instance_type }}"
       tags:
-        name: "{{ item }}"
+        Name: "{{ item }}"
     loop: "{{ instances }}"
     register: ec2_output
 
