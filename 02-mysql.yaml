@@ -1,0 +1,20 @@
+- name: "Mysql setup for database"
+  hosts: database
+  connection: database 
+  become: yes
+  tasks:
+  - name: "Installing mysql"
+    ansible.builtin.package:
+      name: mysql-server 
+      state: present
+  - name: "Start and enable mysql-server"
+    ansible.builtin.service:
+      name: mysqld 
+      state: started 
+      enabled: true 
+  - name: "Set up root password"
+    ansible.builtin.command: mysql_secure_installation --set-root-pass ExpenseApp@1   
+  - name: "Restart mysql"
+    ansible.builtin.service:
+      name: mysqld
+      state: restarted

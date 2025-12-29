@@ -1,0 +1,70 @@
+- name: "Backend setup"
+  hosts: backend 
+  connection: backend 
+  become: yes 
+  tasks: 
+  - name: "Disable default nodejs version"
+    ansible.builtin.command: dnf module disable nodejs -y
+
+  - name: "Enable required nodejs version"
+    ansible.builtin.command: dnf module enable nodejs:20 -y 
+
+  - name: "Install nodejs"
+    ansible.builtin.package:
+      name: nodejs
+      state: present 
+
+  - name: "Adding application user or system user"
+    ansible.builtin.user: 
+      name: expense 
+      comment: "expense system user" 
+      shell: /sbin/nologin
+      system: true
+      home: /app
+  # Safe to remove directory, because 2nd time if we run it will download freshly. no error if does not exist
+  - name: "Remove app directory"
+    ansible.builtin.file:
+      path: /app
+      state: absent
+  - name: "Creating app directory"
+    ansible.builtin.file: 
+      path: /app 
+      state: directory
+
+  - name: "Delete old backend code"
+    ansible.builtin.file:
+      path: /tmp/backend.zip
+      state: absent
+  - name: "Download the latest code"
+    ansible.builtin.get_url:
+        url: https://expense-joindevops.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+        dest: /tmp/backend.zip
+  - name: "Unzip the code"
+    ansible.builtin.unarchive:
+      src: /tmp/backend.zip
+      dest: /app
+      remote_src: yes
+  - name: "npm install setup"
+    community.general.npm:
+    path: /app # Directory containing package.json
+
+  - name: "Copy backend service file"
+    ansible.builtin.copy:
+      src: backend.service
+      dest: /etc/systemd/system/backend.service
+
+  - name: "Install mysql client"
+    ansible.builtin.package: 
+      name: mysql 
+      state: present
+
+  - name: "Load schema"
+    ansible.builtin.shell: mysql -h database.devops-phani.fun -uroot -pExpenseApp@1 < /app/schema/backend.sql
+
+
+  - name: "Daemon reload"
+    ansible.builtin.systemd_service:
+      name: backend
+      state: restarted
+      enabled: true
+      daemon_reload: true
