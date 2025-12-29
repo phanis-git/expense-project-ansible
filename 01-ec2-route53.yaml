@@ -11,10 +11,10 @@
     # While creating instances we need to change the below list as for our requirement , so this approach is static
     # Dynamically we can pass through command line like below , we can give multiple server in the below array
     # ansible-playbook -i inventory.ini <file-name> -e "instances=['<servername>','<servername>']"
-    # instances:
-    # - frontend
-    # - backend 
-    # - database
+    instances:
+    - frontend
+    - backend 
+    - database
   tasks:
   - name: "Create Ec2 instances"
     amazon.aws.ec2-instance:
