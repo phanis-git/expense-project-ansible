@@ -32,7 +32,7 @@
   - name: "Creating Route53 if frontend"
     amazon.aws.route53:
       state: present
-      zone_id: "{{ hosted_zone_id }}"
+      hosted_zone_id: "{{ hosted_zone_id }}"
       record: "{{ domain_name }}"
       type: A
       ttl: 1
@@ -44,7 +44,7 @@
   - name: "Creating Route53 if not frontend"
     amazon.aws.route53:
       state: present
-      zone_id: "{{ hosted_zone_id }}"
+      hosted_zone_id: "{{ hosted_zone_id }}"
       record: "{{ item.item }}.{{ domain_name }}"
       type: A
       ttl: 1
