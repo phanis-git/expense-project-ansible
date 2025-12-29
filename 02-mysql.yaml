@@ -1,6 +1,6 @@
 - name: "Mysql setup for database"
   hosts: database
-  connection: database 
+  connection: ssh 
   become: yes
   tasks:
   - name: "Installing mysql"
