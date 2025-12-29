@@ -1,6 +1,6 @@
 - name: "Frontend setup"
   hosts: frontend 
-  connection: frontend 
+  connection: ssh 
   become: yes
   tasks:
   - name: "Install nginx"

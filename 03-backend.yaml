@@ -1,6 +1,6 @@
 - name: "Backend setup"
   hosts: backend 
-  connection: backend 
+  connection: ssh 
   become: yes 
   tasks: 
   - name: "Disable default nodejs version"
