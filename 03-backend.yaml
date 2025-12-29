@@ -46,7 +46,7 @@
       remote_src: yes
   - name: "npm install setup"
     community.general.npm:
-    path: /app # Directory containing package.json
+      path: /app # Directory containing package.json
 
   - name: "Copy backend service file"
     ansible.builtin.copy:
